@@ -1,4 +1,5 @@
 const express = require('express');
+const { isAuth } = require('../middlewares/guards');
 
 const router = express.Router();
 
@@ -11,17 +12,20 @@ router.post('/login', async (req, res) => {
 });
 
 router.post('/register', async (req, res) => {
-    const { username, password, repeatPassword } = req.body;
+    const userData = req.body;
 
-    if (password !== repeatPassword) return res.status(400).json({ message: 'Passwords does not match!' });
-
-    const result = await req.users.register(username, password);
+    const result = await req.users.register(userData);
 
     if (result.errors) {
         return res.status(400).json(result);
     }
 
     res.json(result);
+});
+
+router.get('/logout', isAuth(), async (req, res) => {
+    await req.users.logout(req.user.token);
+    res.json({ message: 'Success!' })
 });
 
 module.exports = router;

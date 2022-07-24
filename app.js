@@ -4,14 +4,17 @@ require('./dbConn');
 const articlesController = require('./controllers/articles');
 const usersController = require('./controllers/auth');
 
+const authMiddleware = require('./middlewares/auth');
+
 const articlesService = require('./services/articles');
 const usersService = require('./services/users');
 
 const app = express();
 
 app.use(express.json());
-app.use(articlesService());
 app.use(usersService());
+
+app.use(authMiddleware());
 
 app.use('/articles', articlesController);
 app.use('/user', usersController);

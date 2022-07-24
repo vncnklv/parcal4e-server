@@ -14,7 +14,8 @@ async function create(data) {
         available_sizes: data.available_sizes,
         color: data.color,
         price: data.price,
-        sizes: data.sizes
+        sizes: data.sizes,
+        _ownerId: data._ownerId
     });
 
     try {
@@ -52,13 +53,10 @@ async function del(id, data) {
     return article;
 }
 
-module.exports = () => (req, res, next) => {
-    req.articles = {
-        getAll,
-        create,
-        getById,
-        edit,
-        del
-    }
-    next();
-};
+module.exports = {
+    getAll,
+    create,
+    getById,
+    edit,
+    del
+}

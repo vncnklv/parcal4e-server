@@ -5,7 +5,7 @@ const userSchema = new Schema({
     username: {
         type: String,
         required: [true, 'Username not provided!'],
-        minLength: [3, 'Username must have atleast 3 characters!']
+        minLength: [3, 'Username must have atleast 3 characters!'],
     },
     password: {
         type: String,
@@ -23,6 +23,13 @@ userSchema.virtual('repeatPassword').set(function (value) {
 userSchema.pre('save', async function (next) {
     this.password = await bcrypt.hash(this.password, 10);
     next();
+});
+
+userSchema.index({ username: 1 }, {
+    collation: {
+        locale: 'en',
+        strength: 1
+    }
 });
 
 const User = model('User', userSchema);

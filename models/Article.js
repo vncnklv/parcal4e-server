@@ -1,4 +1,4 @@
-const { Schema, model } = require('mongoose');
+const { Schema, model, Types: { ObjectId } } = require('mongoose');
 
 const articleSchema = new Schema({
     name: {
@@ -29,7 +29,7 @@ const articleSchema = new Schema({
     },
     description: {
         type: String,
-        required: true, 
+        required: true,
         minLength: [10, 'Article description must be atleast 10 characters']
     },
     sizes: {
@@ -38,14 +38,19 @@ const articleSchema = new Schema({
         validate: [(v) => Array.isArray(v) && v.length > 0, 'Article must have atleast one size']
     },
     price: {
-        type: Number, 
+        type: Number,
         required: true,
-        min:[1, 'Article price cannot be smaller than 1']
+        min: [1, 'Article price cannot be smaller than 1']
     },
     color: {
         type: String,
         required: true,
         minLength: [3, 'Article color must be atleast 3 characters']
+    },
+    _ownerId: {
+        type: ObjectId,
+        ref: 'User',
+        required: true
     }
 });
 
