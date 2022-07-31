@@ -47,6 +47,14 @@ const articleSchema = new Schema({
         required: true,
         minLength: [3, 'Article color must be atleast 3 characters']
     },
+    brand: {
+        type: String,
+        required: true,
+    },
+    likes: {
+        type: Number,
+        default: 0
+    },
     _ownerId: {
         type: ObjectId,
         ref: 'User',

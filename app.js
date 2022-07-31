@@ -19,10 +19,10 @@ app.use(authMiddleware());
 app.use('/articles', articlesController);
 app.use('/user', usersController);
 
-app.listen('3000', (err) => {
+app.listen(3030, (err) => {
     if (err) {
         console.log(err);
     } else {
-        console.log('App listening on port 3000');
+        console.log('App listening on port 3030');
     }
 })

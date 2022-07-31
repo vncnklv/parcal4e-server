@@ -15,6 +15,7 @@ async function create(data) {
         color: data.color,
         price: data.price,
         sizes: data.sizes,
+        brand: data.brand,
         _ownerId: data._ownerId
     });
 
@@ -53,10 +54,17 @@ async function del(id, data) {
     return article;
 }
 
+async function getMostLiked() {
+    const mostLiked = await Article.find({}).sort({ likes: -1 }).limit(5);
+    console.log(mostLiked);
+    return mostLiked;
+}
+
 module.exports = {
     getAll,
     create,
     getById,
     edit,
-    del
+    del,
+    getMostLiked
 }

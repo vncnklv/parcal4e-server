@@ -12,6 +12,11 @@ router.get('/', async (req, res) => {
     res.json(articles);
 });
 
+router.get('/most-liked', async (req, res) => {
+    const articles = await api.getMostLiked();
+    res.json(articles);
+})
+
 router.post('/', isAuth(), async (req, res) => {
     const article = await api.create({ ...req.body, _ownerId: req.user.id });
     if (article.errors) {
