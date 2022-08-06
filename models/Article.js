@@ -55,6 +55,10 @@ const articleSchema = new Schema({
         type: Number,
         default: 0
     },
+    likedBy: {
+        type: [ObjectId],
+        ref: 'User',
+    },
     _ownerId: {
         type: ObjectId,
         ref: 'User',

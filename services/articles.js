@@ -68,9 +68,37 @@ async function del(id, data) {
 
 async function getMostLiked() {
     const mostLiked = await Article.find({}).sort({ likes: -1 }).limit(5);
-    console.log(mostLiked);
     return mostLiked;
 }
+
+async function addLike(articleId, userId) {
+    const article = await Article.findById(articleId);
+
+    if (!article) return { message: 'Article not found!' };
+    if (article.likedBy.includes(userId)) return { message: 'Article is already liked by this user!' };
+
+    article.likedBy.push(userId);
+    article.likes++;
+
+    await article.save();
+
+    return article;
+}
+
+async function removeLike(articleId, userId) {
+    const article = await Article.findById(articleId);
+
+    if (!article) return { message: 'Article not found!' };
+    if (!article.likedBy.includes(userId)) return { message: 'Article is not liked by this user!' };
+
+    article.likedBy.splice(article.likedBy.indexOf(userId), 1);
+    article.likes--;
+
+    await article.save();
+
+    return article;
+}
+
 
 module.exports = {
     getAll,
@@ -80,4 +108,6 @@ module.exports = {
     del,
     getMostLiked,
     getMaxPages,
+    addLike,
+    removeLike
 }

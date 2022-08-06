@@ -51,11 +51,23 @@ router.patch('/:id', isAuth(), preload(api), isOwner(), async (req, res) => {
 });
 
 router.delete('/:id', async (req, res) => {
-    const deletedArticle = await req.articles.del(req.params.id);
+    const deletedArticle = await api.del(req.params.id);
 
     if (!deletedArticle) return res.status(404).json({ message: 'Not found' });
 
     res.json(deletedArticle);
+});
+
+router.get('/:id/like', isAuth(), async (req, res) => {
+    const articleId = req.params.id;
+    const article = await api.addLike(articleId, req.user.id);
+    res.json(article);
+});
+
+router.get('/:id/dislike', isAuth(), async (req, res) => {
+    const articleId = req.params.id;
+    const article = await api.removeLike(articleId, req.user.id);
+    res.json(article);
 });
 
 module.exports = router;
