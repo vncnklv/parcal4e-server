@@ -1,8 +1,5 @@
 const Article = require('../models/Article');
 
-async function getAll() {
-    return Article.find({});
-}
 
 async function create(data) {
     const article = new Article({
@@ -27,6 +24,21 @@ async function create(data) {
         Object.values(err.errors).map(e => Object.assign(errors, { [e.path]: e.properties.message }));
         return { errors };
     }
+}
+
+async function getAll(ageGroup, gender, page, limit) {
+    return Article.find({
+        'age_group': new RegExp(`^${ageGroup}$`, 'i'),
+        'gender': new RegExp(`^${gender}$`, 'i')
+    })
+        .skip((page - 1) * limit)
+        .limit(limit);
+}
+
+async function getMaxPages(ageGroup, gender, limit) {
+    const documentsCount = await Article.find({ 'age_group': ageGroup, 'gender': gender }).count();
+    console.log(documentsCount, limit);
+    return Math.ceil(documentsCount / limit);
 }
 
 async function getById(id) {
@@ -66,5 +78,6 @@ module.exports = {
     getById,
     edit,
     del,
-    getMostLiked
+    getMostLiked,
+    getMaxPages,
 }

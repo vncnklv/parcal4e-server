@@ -8,8 +8,19 @@ const api = require('../services/articles');
 const router = express.Router();
 
 router.get('/', async (req, res) => {
-    const articles = await api.getAll();
-    res.json(articles);
+    const ageGroup = req.query['age_group'] || 'adult';
+    const gender = req.query.gender;
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+
+    const [articles, maxPages] = await Promise.all([
+        api.getAll(ageGroup, gender, page, limit),
+        api.getMaxPages(ageGroup, gender, limit)
+    ]);
+    res.json({
+        result: articles,
+        max_pages: maxPages
+    });
 });
 
 router.get('/most-liked', async (req, res) => {
